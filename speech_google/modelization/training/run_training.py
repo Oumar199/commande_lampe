@@ -3,7 +3,7 @@
 from speech_google.modelization.analyze.tensorboard import SpecTensorboard
 from speech_google.modelization.models.spec_models import SpecModel1
 from torch.nn import CrossEntropyLoss, BCELoss, BCEWithLogitsLoss
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter # type: ignore
 from torch.utils.data import Dataset, DataLoader
 from torchvision.datasets import ImageFolder
 from torch.optim import Adam, SGD
@@ -246,8 +246,8 @@ class SpecRunner1(SpecTensorboard):
             data = torch.from_numpy(data)
 
         # Ajoutons une dimension aux données si le nombre de dimensions est inférieur à 4
-        if len(data.size()) < 4:
-            data = data.unsqueeze(0)
+        if len(data.size()) < 4: # type: ignore
+            data = data.unsqueeze(0) # type: ignore
 
         outputs = self.model(data)
 
@@ -372,8 +372,8 @@ class SpecRunner2(SpecRunner1):
             data = torch.from_numpy(data)
 
         # Ajoutons une dimension aux données si le nombre de dimensions est inférieur à 4
-        if len(data.size()) < 4:
-            data = data.unsqueeze(0)
+        if len(data.size()) < 4: # type: ignore
+            data = data.unsqueeze(0) # type: ignore
 
         outputs = self.model(data)
 
