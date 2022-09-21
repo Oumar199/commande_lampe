@@ -45,6 +45,16 @@ def vocal_print(text: str):
         pass
 
 def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8):
+    """Effectuer une échange avec le bot.
+
+    Args:
+        exit_ (bool, optional): Indiquer si l'utilisateur souhaite quitter. Defaults to False.
+        bot_name (str, optional): Le nom du bot. Defaults to "Elisa".
+        thres (float, optional): Le seuil de probabilité minimale de la classe. Defaults to 0.8.
+
+    Returns:
+        str: La réponse fournie par le bot
+    """
     if exit_ == False:
         # Enregistrement d'une commande
         key = auto_create_spec()
