@@ -2,6 +2,7 @@ from speech_google.modelization.models.spec_models import SpecModel1
 from torch import nn
 import torch
 
+
 def modify_multi_to_binary(model: nn.Module = SpecModel1()):
     """Fonction qui permet de transformer un modèle multi-classe en un modèle à sortie binaire
 
@@ -15,9 +16,6 @@ def modify_multi_to_binary(model: nn.Module = SpecModel1()):
     in_feat = lin_layer.in_features
 
     # On modifie la dernière couche en fournissant une sigmoide en plus
-    model.fc = nn.Sequential(
-        nn.Linear(in_feat, 1),
-        nn.Sigmoid()
-    )
-    
+    model.fc = nn.Sequential(nn.Linear(in_feat, 1), nn.Sigmoid())
+
     return model

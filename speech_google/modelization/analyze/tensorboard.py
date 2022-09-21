@@ -9,26 +9,32 @@ from torchvision.datasets import ImageFolder
 from typing import Union
 import os
 
+
 class SpecTensorboard(object):
-    """Une classe tensorboard uniquement utilisée pour le modèle d'entraînement des spectogramems
-    """
-    def __init__(self, dataset: Union[Dataset, ImageFolder], version: int, running_directory: str = "runs"):
+    """Une classe tensorboard uniquement utilisée pour le modèle d'entraînement des spectogramems"""
+
+    def __init__(
+        self,
+        dataset: Union[Dataset, ImageFolder],
+        version: int,
+        running_directory: str = "runs",
+    ):
         """Initialisation du tensorboard
 
         Args:
-            version (int): Version du tensorboard voir du modèle.   
+            version (int): Version du tensorboard voir du modèle.
             running_directory (str, optional): Le chemin vers le dossier de sauvegarde des données de tensorboard. Defaults to "runs".
         """
         self.running_directory = running_directory
         self.path = os.path.join(self.running_directory, f"version{version}")
         self.version = version
-        
+
         self.writer = SummaryWriter(self.path)
         self.model = None
         self.dataset = dataset
         self.train_accuracy = None
         self.test_accuracy = None
-    
+
     def add_images(self, n_images: int = 28, seed: Union[int, None] = None):
         """Chargement d'images au niveau de tensorboard
 
@@ -37,27 +43,33 @@ class SpecTensorboard(object):
             seed (Union[int, None]): Graine du générateur.
         """
         torch.manual_seed(torch.randint(0, 1000, (1, 1)) if not seed else seed)
-        
+
         # initialisation d'un chargeur de données
-        loader = DataLoader(self.dataset, batch_size = n_images)
-        
+        loader = DataLoader(self.dataset, batch_size=n_images)
+
         # chargement d'un batch d'images
         data, _ = iter(loader).next()
-        
+
         # chargement des données au niveau de tensorboard
         self.writer.add_images("spectrogrammes", data)
-    
+
     def add_architecture(self):
-        """Charger l'architecture du modèle dans tensorboard
-        """
+        """Charger l'architecture du modèle dans tensorboard"""
         loader = DataLoader(dataset=self.dataset, batch_size=40)
-        
+
         data, _ = iter(loader).next()
-        
-        with SummaryWriter(os.path.join(self.running_directory, 'graph')) as writer:
+
+        with SummaryWriter(os.path.join(self.running_directory, "graph")) as writer:
             writer.add_graph(self.model, data)
-            
-    def add_grid_results1(self, hparams: dict, output_size: int = 2, batch_size: int = 5, n_epochs: int = 5, grid_name:str = "h_param_results"):
+
+    def add_grid_results1(
+        self,
+        hparams: dict,
+        output_size: int = 2,
+        batch_size: int = 5,
+        n_epochs: int = 5,
+        grid_name: str = "h_param_results",
+    ):
         """Cette fonction permet d'effectuer la recherche par quadrillage sur le modèle simple.
 
         Args:
@@ -68,14 +80,30 @@ class SpecTensorboard(object):
             grid_name (str, optional): Le nom du dossier dans lequel seront sauvés les résultats. Defaults to "h_param_results".
         """
         with SummaryWriter(os.path.join(self.path, grid_name)) as w:
-            for lr in hparams['learning_rate']:
-                for drop_out in hparams['dropout']:
-                    for num_units in hparams['num_units']:
-                        params = {'learning_rate': lr, 'dropout': drop_out, 'num_units': num_units}
-                        self.compile(learning_rate = lr, drop_out_rate = drop_out, num_units = num_units, batch_size=batch_size, output_size=output_size)
+            for lr in hparams["learning_rate"]:
+                for drop_out in hparams["dropout"]:
+                    for num_units in hparams["num_units"]:
+                        params = {
+                            "learning_rate": lr,
+                            "dropout": drop_out,
+                            "num_units": num_units,
+                        }
+                        self.compile(
+                            learning_rate=lr,
+                            drop_out_rate=drop_out,
+                            num_units=num_units,
+                            batch_size=batch_size,
+                            output_size=output_size,
+                        )
                         self.train(n_epochs)
-                        w.add_hparams(params, {'train_accuracy': self.train_accuracy, 'test_accuracy': self.test_accuracy})
-    
+                        w.add_hparams(
+                            params,
+                            {
+                                "train_accuracy": self.train_accuracy,
+                                "test_accuracy": self.test_accuracy,
+                            },
+                        )
+
     def train(self, epochs: int = 50):
         """Entraînement du modèle
 
@@ -84,8 +112,14 @@ class SpecTensorboard(object):
         """
         raise NotImplementedError
 
-
-    def compile(self, drop_out_rate: float = 0.3, num_units: int = 3000, output_size: int = 7, learning_rate: float = 0.0001, batch_size: int = 5):
+    def compile(
+        self,
+        drop_out_rate: float = 0.3,
+        num_units: int = 3000,
+        output_size: int = 7,
+        learning_rate: float = 0.0001,
+        batch_size: int = 5,
+    ):
         """Initialisation des paramètres d'entraînement
 
         Args:
