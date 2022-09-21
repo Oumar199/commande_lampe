@@ -1,4 +1,4 @@
-"""Ici sont définis les différentes modèles pour les spectogrammes
+"""Ici sont définis les différents modèles pour les spectogrammes
 """
 import torch
 from torch import nn

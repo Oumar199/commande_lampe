@@ -33,7 +33,7 @@ class SpecRunner1(SpecTensorboard):
         self.stds = stds
     
     def batch_train(self, model: nn.Module, optimizer: Union[Adam, SGD], loss_function : Union[CrossEntropyLoss, BCEWithLogitsLoss, BCELoss] = CrossEntropyLoss()):
-        """Une closure permettant d'effectuer un entraînement sur un batch 
+        """Un closeur permettant d'effectuer un entraînement sur un batch 
 
         Args:
             model (nn.Module): Le modèle
@@ -61,7 +61,7 @@ class SpecRunner1(SpecTensorboard):
         return wrapper
     
     def batch_test(self, model: nn.Module, loss_function : Union[CrossEntropyLoss, BCEWithLogitsLoss, BCELoss] = CrossEntropyLoss()):
-        """Une closure permettant d'effectuer un test sur un batch 
+        """Un closeur permettant d'effectuer un test sur un batch 
 
         Args:
             model (nn.Module): Le modèle

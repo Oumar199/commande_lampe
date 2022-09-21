@@ -1,8 +1,8 @@
+"""Création d'un modèle plus simple
+"""
 import torch
 from torch import nn
 from torch.nn import functional as F
-"""Création d'un modèle plus simple
-"""
 
 class SpecModel2(nn.Module):
     def __init__(self, drop_out_rate: float = 0.3, num_units: int = 400, output_size: int = 2):
