@@ -5,7 +5,7 @@ from speech_google.modelization.models.simple_spec_models import SpecModel2
 from speech_google.modelization.training.run_training import SpecRunner1
 from torch.nn import CrossEntropyLoss, BCELoss, BCEWithLogitsLoss
 from torch.utils.data import Dataset, DataLoader, random_split
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter # type: ignore
 from torchvision.datasets import ImageFolder
 from torch.optim import Adam, SGD
 from typing import Union, List
@@ -46,8 +46,8 @@ class SpecRunner3(SpecRunner1):
         if seed:
             torch.manual_seed(seed)
 
-        n_test = round(len(self.dataset) * 0.2)
-        n_train = len(self.dataset) - n_test
+        n_test = round(len(self.dataset) * 0.2) # type: ignore
+        n_train = len(self.dataset) - n_test # type: ignore
         return random_split(self.dataset, [n_train, n_test])
 
     def compile(
@@ -212,8 +212,8 @@ class SpecRunner3(SpecRunner1):
             data = torch.from_numpy(data)
 
         # Ajoutons une dimension aux données si le nombre de dimensions est inférieur à 4
-        if len(data.size()) < 4:
-            data = data.unsqueeze(0)
+        if len(data.size()) < 4: # type: ignore
+            data = data.unsqueeze(0) # type: ignore
 
         outputs = self.model(data)
 

@@ -18,7 +18,7 @@ def predict(key: str):
     """
     # Initialisation la classe d'entraînement
     lampe_model = SpecRunner3(
-        None,
+        None, # type: ignore
         version=4,
         means=[0.4654483497142792, 0.20280373096466064, 0.3366987705230713],
         stds=[0.384673535823822, 0.22996403276920319, 0.20797881484031677],
