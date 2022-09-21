@@ -1,0 +1,28 @@
+{
+  "lampe_test1": [
+    {
+      "tag": "on",
+      "patterns": [
+        "Allume la lampe",
+        "..."
+      ],
+      "responses": [
+        "Bien compris, lampe allumee",
+        "D'accord, j'allume la lampe",
+        "Lampe allumee"
+      ]
+    },
+    {
+      "tag": "off",
+      "patterns": [
+        "Eteins la lampe",
+        "..."
+      ],
+      "responses": [
+        "Bien compris, j'eteins la lampe",
+        "D'accors, lampe eteinte",
+        "Lampe eteinte"
+      ]
+    }
+  ] 
+}
