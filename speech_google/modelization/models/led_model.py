@@ -13,9 +13,9 @@ def modify_multi_to_binary(model: nn.Module = SpecModel1()):
     lin_layer = model.fc
 
     # On récupère le nombre d'entrées de la dernière couche
-    in_feat = lin_layer.in_features
+    in_feat = lin_layer.in_features # type: ignore
 
     # On modifie la dernière couche en fournissant une sigmoide en plus
-    model.fc = nn.Sequential(nn.Linear(in_feat, 1), nn.Sigmoid())
+    model.fc = nn.Sequential(nn.Linear(in_feat, 1), nn.Sigmoid()) # type: ignore
 
     return model

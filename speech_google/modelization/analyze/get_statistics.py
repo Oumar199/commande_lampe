@@ -13,7 +13,7 @@ def get_mean_std(images: Union[ImageFolder, Dataset], on_each_color: bool = Fals
         images (Union[ImageFolder, Dataset]): L'ensemble d'images
     """
     # chargement de données
-    loader = DataLoader(images, batch_size=len(images))
+    loader = DataLoader(images, batch_size=len(images)) # type: ignore
 
     data, _ = iter(loader).next()
 

@@ -44,7 +44,7 @@ def auto_create_spec(
     librosa.display.specshow(
         Y_spec, sr=sr, hop_length=hop_size, x_axis="time", y_axis=y_axis
     )
-
+    
     # Enlevons les axes qui peuvent biaisés les résultats
     ax = plt.gca()
     ax.axes.xaxis.set_visible(False)

@@ -5,7 +5,7 @@ On suppose qu'un modèle prédisant la classe d'un enregistrement vocal a dèja 
 à l'emploi.
 """
 from speech_google.modelization.training.run_training import SpecRunner1
-from torchvision.transforms import ToTensor, Normalize, Compose
+from torchvision.transforms import ToTensor, Normalize, Resize, Compose
 from typing import Union, List
 import PIL.Image as pi
 import torch
@@ -29,10 +29,10 @@ def predict_record(
     path = f"{key}_spectrogram.png"
     if os.path.exists(path):
         # Récupérons l'image
-        image = pi.open(path).convert("RGB")
+        image = pi.open(path).convert("RGB") # type: ignore
 
         # Initialisation du transformateur
-        compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
+        compose = Compose([ ToTensor(), Resize((220, 338)), Normalize(runner.means, runner.stds)])
         # compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
 
         # Effectuons de la transformation sur l'image
@@ -68,8 +68,7 @@ def predict_record(
             return class_name, prob
 
         except Exception as e:
-            print(e)
-            raise OSError(f"Le modèle ne se trouve pas au chemin {model_path}")
+            raise Exception("Une erreur s'est produite !")
 
     else:
         raise ValueError("L'enregistrement vocal est indisponible")

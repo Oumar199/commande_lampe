@@ -186,12 +186,12 @@ class SpecRunner1(SpecTensorboard):
                 accuracies += (predictions == labels).sum().item()
 
                 if n_batches % 100 == 0:
-                    self.writer.add_scalar(
+                    self.writer.add_scalar( # type: ignore
                         "accuracy",
                         accuracies * 100 / (100 * self.batch_size),
                         global_step=n_batches,
                     )
-                    self.writer.add_scalar(
+                    self.writer.add_scalar( # type: ignore
                         "losses", losses / 100, global_step=n_batches
                     )
                     losses = 0
@@ -344,12 +344,12 @@ class SpecRunner2(SpecRunner1):
                 accuracies += (predictions == labels).sum().item()
 
                 if n_batches % 100 == 0:
-                    self.writer.add_scalar(
+                    self.writer.add_scalar( # type: ignore
                         "accuracy",
                         accuracies * 100 / (100 * self.batch_size),
                         global_step=n_batches,
                     )
-                    self.writer.add_scalar(
+                    self.writer.add_scalar( # type: ignore
                         "losses", losses / 100, global_step=n_batches
                     )
                     losses = 0

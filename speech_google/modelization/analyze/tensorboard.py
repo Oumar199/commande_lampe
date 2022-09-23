@@ -3,7 +3,7 @@ juger de la performance du modèle et d'effectuer des analyses plus poussées. C
 capable de charger des données au niveau de tensorboard.
 """
 import torch
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter # type: ignore
 from torch.utils.data import Dataset, DataLoader
 from torchvision.datasets import ImageFolder
 from typing import Union
@@ -29,7 +29,10 @@ class SpecTensorboard(object):
         self.path = os.path.join(self.running_directory, f"version{version}")
         self.version = version
 
-        self.writer = SummaryWriter(self.path)
+        """
+        Remove Tensorboard
+        """
+        # self.writer = SummaryWriter(self.path)
         self.model = None
         self.dataset = dataset
         self.train_accuracy = None
@@ -51,7 +54,7 @@ class SpecTensorboard(object):
         data, _ = iter(loader).next()
 
         # chargement des données au niveau de tensorboard
-        self.writer.add_images("spectrogrammes", data)
+        self.writer.add_images("spectrogrammes", data) # type: ignore
 
     def add_architecture(self):
         """Charger l'architecture du modèle dans tensorboard"""

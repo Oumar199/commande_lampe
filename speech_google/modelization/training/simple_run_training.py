@@ -156,12 +156,12 @@ class SpecRunner3(SpecRunner1):
                         acc += (predictions == labels).sum().item()
 
                         if n_batches % 15 == 0:
-                            self.writer.add_scalar(
+                            self.writer.add_scalar( # type: ignore
                                 f"{mode}_accuracy",
                                 accuracies * 100 / (15 * self.batch_size),
                                 global_step=n_batches,
                             )
-                            self.writer.add_scalar(
+                            self.writer.add_scalar( # type: ignore
                                 f"{mode}_losses", losses / 15, global_step=n_batches
                             )
                             losses = 0
