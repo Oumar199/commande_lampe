@@ -6,7 +6,11 @@ Création d'une fonction qui permet d'enregistrer, au moment présent, notre voi
 from speech_google.tests.utils.save_record import VoiceRecord
 import string
 import secrets
-import winsound
+import os
+try:
+    import winsound
+except:
+    pass
 
 frequency = 1500
 duration = 500
@@ -29,7 +33,10 @@ def auto_voice_record(seconds: int = 4):
     voice_record = VoiceRecord(seconds=seconds)
 
     # Enregistrement de la voix
-    winsound.Beep(frequency, duration)
+    try:
+        winsound.Beep(frequency, duration)  # try winsound if windows
+    except:
+        os.system('beep -f %s -l %s' % (frequency,duration))
     voice_record.make_record()
 
     # Sauvegarde de l'enregistrement

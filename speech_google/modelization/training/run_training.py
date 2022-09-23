@@ -1,7 +1,7 @@
 """Classe d'apprentissage de réseau de neurones
 """
 from speech_google.modelization.analyze.tensorboard import SpecTensorboard
-from speech_google.modelization.models.spec_models import SpecModel1
+
 from torch.nn import CrossEntropyLoss, BCELoss, BCEWithLogitsLoss
 from torch.utils.tensorboard import SummaryWriter # type: ignore
 from torch.utils.data import Dataset, DataLoader
@@ -121,42 +121,11 @@ class SpecRunner1(SpecTensorboard):
             learning_rate (float, optional): Le taux d'apprentissage. Defaults to 0.0001.
             batch_size (int, optional): La taille d'un lot d'images. Defaults to 5.
         """
-        # Récupérons d'abord le type de device ('gpu cuda' ou 'cpu') présent sur l'appareil
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-        # Attribution des hyper paramètres et du batch size
-        self.drop_out_rate = drop_out_rate
-        self.num_units1 = num_units1
-        self.num_units2 = num_units2
-        self.num_units3 = num_units3
-        self.learning_rate = learning_rate
-        self.batch_size = batch_size
-
-        # Initialisation du modèle et de ses poids
-        self.model: nn.Module = SpecModel1(
-            drop_out_rate, num_units1, num_units2, num_units3, output_size
-        )
-        self.model.to(self.device)
-
-        # Initialisation de l'optimiseur
-        self.optimizer = Adam(self.model.parameters(), lr=learning_rate)
-
-        if self.dataset:
-            # Récupérons le chargeur de données
-            self.loader = DataLoader(self.dataset, batch_size=batch_size, shuffle=True)
-
-            # Initialisation du closeur d'entraînement
-            self.batch_step = self.batch_train(self.model, self.optimizer)
+        pass
 
     def get_hparams_dict(self):
         """Récupération des hyper paramètres du modèle"""
-        return {
-            "drop_out_rate": self.drop_out_rate,
-            "num_units1": self.num_units1,
-            "num_units2": self.num_units2,
-            "num_units3": self.num_units3,
-            "learning_rate": self.learning_rate,
-        }
+        pass
 
     def train(self, epochs: int = 50):
         """Entraînement du modèle
@@ -164,40 +133,7 @@ class SpecRunner1(SpecTensorboard):
         Args:
             epochs (int, optional): Le nombre d'itérations. Defaults to 50.
         """
-        self.epochs = epochs
-        self.model.train()
-        accuracies = 0
-        losses = 0
-        n_batches = 0
-        for epoch in tqdm(range(self.epochs)):
-            for inputs, labels in self.loader:
-                inputs, labels = inputs.to(self.device), labels.to(self.device)
-
-                # Récupération de la perte et des sorties
-                loss, outputs = self.batch_step(inputs, labels)
-
-                # Récupérons les prédictions
-                _, predictions = torch.max(outputs.data, dim=1)
-
-                # Ajout du loss
-                losses += loss
-
-                # Ajoutons l'accuracy
-                accuracies += (predictions == labels).sum().item()
-
-                if n_batches % 100 == 0:
-                    self.writer.add_scalar( # type: ignore
-                        "accuracy",
-                        accuracies * 100 / (100 * self.batch_size),
-                        global_step=n_batches,
-                    )
-                    self.writer.add_scalar( # type: ignore
-                        "losses", losses / 100, global_step=n_batches
-                    )
-                    losses = 0
-                    accuracies = 0
-
-                n_batches += 1
+        pass
 
     def save_model(self, saving_path: str = "speech_google/modelization/storages"):
         """Sauvegarde du modèle et de quelques paramètres
@@ -205,20 +141,7 @@ class SpecRunner1(SpecTensorboard):
         Args:
             saving_path (str, optional): Le chemin vers le dossier de sauvegarde. Defaults to "speech_google/storages".
         """
-        path = os.path.join(saving_path, f"version{self.version}")
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        checkpoints = {
-            "model_state_dict": self.model.state_dict(),
-            "optimizer_state_dict": self.optimizer.state_dict(),
-            "hparams_dict": self.get_hparams_dict(),
-            "epochs": self.epochs,
-            "batch_size": self.batch_size,
-            "device": self.device,
-        }
-
-        torch.save(checkpoints, os.path.join(path, "checkpoints.pth"))
+        pass
 
     def load_model(self, saving_path: str = "speech_google/modelization/storages"):
         """Chargement du modèle
@@ -257,7 +180,6 @@ class SpecRunner1(SpecTensorboard):
 
 
 # ----------------------------------------------
-from speech_google.modelization.models.led_model import modify_multi_to_binary
 from torch.nn import BCELoss
 
 
@@ -302,19 +224,7 @@ class SpecRunner2(SpecRunner1):
             learning_rate (float, optional): Le taux d'apprentissage. Defaults to 0.0001.
             batch_size (int, optional): La taille d'un lot d'images. Defaults to 5.
         """
-        super().compile(
-            drop_out_rate,
-            num_units1,
-            num_units2,
-            num_units3,
-            output_size,
-            learning_rate,
-            batch_size,
-        )
-        self.model = modify_multi_to_binary(self.model)
-        self.optimizer = Adam(self.model.parameters())
-        if self.dataset:
-            self.batch_step = self.batch_train(self.model, self.optimizer, BCELoss())
+        pass
 
     def train(self, epochs: int = 50):
         """Entraînement du modèle
@@ -322,40 +232,7 @@ class SpecRunner2(SpecRunner1):
         Args:
             epochs (int, optional): Le nombre d'itérations. Defaults to 50.
         """
-        self.epochs = epochs
-        self.model.train()
-        accuracies = 0
-        losses = 0
-        n_batches = 0
-        for epoch in tqdm(range(self.epochs)):
-            for inputs, labels in self.loader:
-                inputs, labels = inputs.to(self.device), labels.to(self.device).float()
-
-                # Récupération de la perte et des sorties
-                loss, outputs = self.batch_step(inputs, labels.unsqueeze(1))
-
-                # Récupérons les prédictions
-                predictions = torch.round(outputs).squeeze(1)
-
-                # Ajout du loss
-                losses += loss
-
-                # Ajoutons l'accuracy
-                accuracies += (predictions == labels).sum().item()
-
-                if n_batches % 100 == 0:
-                    self.writer.add_scalar( # type: ignore
-                        "accuracy",
-                        accuracies * 100 / (100 * self.batch_size),
-                        global_step=n_batches,
-                    )
-                    self.writer.add_scalar( # type: ignore
-                        "losses", losses / 100, global_step=n_batches
-                    )
-                    losses = 0
-                    accuracies = 0
-
-                n_batches += 1
+        pass
 
     def predict(
         self, data: Union[torch.Tensor, np.ndarray], classes: List[Union[str, int]]
@@ -367,17 +244,4 @@ class SpecRunner2(SpecRunner1):
             classes (List[Union[str, int]]): Les différentes classes possibles.
         """
 
-        # Transformons les données si elles sont de type numpy array
-        if type(data) is np.ndarray:
-            data = torch.from_numpy(data)
-
-        # Ajoutons une dimension aux données si le nombre de dimensions est inférieur à 4
-        if len(data.size()) < 4: # type: ignore
-            data = data.unsqueeze(0) # type: ignore
-
-        outputs = self.model(data)
-
-        predictions = torch.round(outputs)
-
-        print(predictions)
-        # return [classes[prediction] for prediction in predictions.tolist()]
+        pass
