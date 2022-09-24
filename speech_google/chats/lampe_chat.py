@@ -64,7 +64,7 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8
         # Récupération de la prédiction et de sa probabilité
         class_name, prob = predict(key)
         prob = prob.item()  # On récupère la probabilité en nombre et non en tensor
-
+        
         # Initialisation de la réponse à ""
         response = ""
         # Le bot ne donne une réponse que si la probabilité de la classe prédite dépasse un seuil fourni
@@ -77,7 +77,7 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8
                     if class_name == intent["tag"]:
                         response = f"{random.choice(intent['responses']).replace('bot_name', bot_name)}"
         else:
-            response = f"Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
+            response = "Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
         return response
     else:
         return "Au revoir. J'espère qu'on se reverra bientôt"

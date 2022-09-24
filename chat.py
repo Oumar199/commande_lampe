@@ -6,8 +6,9 @@ while True:
     response = ""
     if quit_ == "q":
         response = lampe_chat1(True)
-        vocal_print(response)
+        #vocal_print(response)
         break
     response =lampe_chat1()
-    print(response)
-    vocal_print(response)
+    #vocal_print(response)
+    with open('speech_google/data/responses/response.txt', 'w') as f:
+        f.write(response)

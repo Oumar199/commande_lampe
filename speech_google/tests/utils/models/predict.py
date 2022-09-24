@@ -62,7 +62,7 @@ def predict_record(
                 prob = probs[0][prediction.item()]
 
             # Suppression du spectrogramme
-            #os.remove(path)
+            os.remove(path)
 
             # Retournons le nom de la classe prédite ainsi que sa probabilité
             return class_name, prob
