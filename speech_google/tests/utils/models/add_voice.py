@@ -36,7 +36,8 @@ def auto_voice_record(seconds: int = 4):
     try:
         winsound.Beep(frequency, duration)  # try winsound if windows
     except:
-        os.system('beep -f %s -l %s' % (frequency,duration))
+        pass
+        #os.system('beep -f %s -l %s' % (frequency,duration))
     voice_record.make_record()
 
     # Sauvegarde de l'enregistrement

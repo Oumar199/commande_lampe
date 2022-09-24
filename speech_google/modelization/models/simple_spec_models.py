@@ -30,6 +30,7 @@ class SpecModel2(nn.Module):
         Args:
             input (torch.Tensor): Les données d'entrée
         """
+        input = input.unsqueeze(0)
         out = self.pool(F.relu(self.conv1(input)))
         out = self.pool(F.relu(self.conv2(out)))
         out = out.view(-1, 32 * 51 * 80)

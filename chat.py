@@ -9,4 +9,5 @@ while True:
         vocal_print(response)
         break
     response =lampe_chat1()
+    print(response)
     vocal_print(response)
