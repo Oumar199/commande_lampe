@@ -54,7 +54,7 @@ def auto_create_spec(
     plt.savefig(f"{name}_spectrogram.png", bbox_inches="tight", pad_inches=0)
 
     # Suppression de l'enregistrement vocal
-    #os.remove(f"{name}_voice.wav")
+    os.remove(f"{name}_voice.wav")
 
     # Retournons la clé
     return name
