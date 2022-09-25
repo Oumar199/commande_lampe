@@ -78,6 +78,6 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8
                         response = f"{random.choice(intent['responses']).replace('bot_name', bot_name)}"
         else:
             response = "Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
-        return response
+        return class_name, response
     else:
         return "Au revoir. J'espère qu'on se reverra bientôt"
