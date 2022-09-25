@@ -54,7 +54,7 @@ while True:
                 
         response = "..."
         now_ = datetime.datetime.now()
-        if c == "221" and (now_ - time_1).seconds >= 10:
+        if c == "221" and (now_ - time_1).seconds >= 5:
             class_name, response = lampe_chat1()
             time_1 = datetime.datetime.now()
             #vocal_print(response)
