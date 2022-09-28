@@ -26,7 +26,7 @@ def predict(key: str):
 
     # Effectuons la compilation du modèle
     lampe_model.compile(
-        output_size=3, num_units=128, drop_out_rate=0.1, learning_rate=0.001
+        output_size=3, num_units=32, drop_out_rate=0.1, learning_rate=0.001
     )
 
     return predict_record(
