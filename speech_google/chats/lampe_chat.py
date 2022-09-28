@@ -64,7 +64,7 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8
         # Récupération de la prédiction et de sa probabilité
         class_name, prob = predict(key)
         prob = prob.item()  # On récupère la probabilité en nombre et non en tensor
-        print(class_name)
+        
         # Initialisation de la réponse à ""
         response = ""
         # Le bot ne donne une réponse que si la probabilité de la classe prédite dépasse un seuil fourni
@@ -72,22 +72,12 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8
             if class_name == "noth":
                 pass
             else:
-                option = None
-                if class_name == "on":
-                    option = "101"
-                elif class_name == "off":
-                    option = "102"
-                
-                if option:
-                    with open('speech_google/data/node_interactions/led_control.txt', 'w') as f:
-                        f.write(option)
-                
                 # On récupère aléatoirement une réponse et on remplace 'bot_name', s'il y figure, par le nom du bot
                 for intent in lampe_json["lampe_test1"]:
                     if class_name == intent["tag"]:
                         response = f"{random.choice(intent['responses']).replace('bot_name', bot_name)}"
         else:
             response = "Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
-        return response
+        return class_name, response
     else:
         return "Au revoir. J'espère qu'on se reverra bientôt"
