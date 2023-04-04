@@ -5,10 +5,19 @@ Nous devrons sauvegarder une phrase ou une commande pour l'utiliser plus tard
 """
 
 # importation de quelques librairies
+from speech_google.tests.utils.error_handling import ignore_stderr
 import pyaudio
 import wave
+import time
 import os
 
+# Let's use beepy module to make a coin sound before recording
+try:
+    from beepy import beep
+    print_beep = False
+except Exception:
+	print_beep = True
+	
 class VoiceRecord(object):
     def __init__(self, n_chunks: int = 1024, sample_format: int = pyaudio.paInt16, channels: int = 2, frequency: int = 44100, seconds: int = 10):
         """Initialisation des principaux attributs
@@ -26,13 +35,55 @@ class VoiceRecord(object):
         self.frequency = frequency
         self.seconds = seconds
     
+    def led_alert(self, mode = "on"):
+        """Permettre à l'utilisateur de connaître le début et la fin 
+        d'un enregistrement
+        
+        Args: 
+            mode (boot, optional): Indique le mode d'alerte, "on" pour allumer le led
+            et "off" pour eteindre le led. Defaults to "on".
+        """
+        if mode == "on":
+            # activons le buzzer
+            with open("speech_google/data/node_interactions/buzzer_control.txt", "w") as f:
+                f.write("31\n")
+            time.sleep(1)
+            
+            # desactivons le buzzer
+            with open("speech_google/data/node_interactions/buzzer_control.txt", "w") as f:
+                f.write("32\n")
+            
+            # allumer le led
+            with open("speech_google/data/node_interactions/ledrupt1.txt", "w") as f:
+                    f.write("11\n")
+            time.sleep(2.5)
+            
+            
+        
+        elif mode == "off":
+            # eteindre le led
+            with open("speech_google/data/node_interactions/ledrupt1.txt", "w") as f:
+                    f.write("12\n")
+        else:
+            raise ValueError("Le mode spécifié n'est pas autorisé")
+            
+    
     def make_record(self, input: bool = True):
-        """Record your voice
+        """Enregistrement de voix
 
         Args:
-            input (bool, optional): Make us to input voice record. Defaults to True.
+            input (bool, optional): Mets l'enregistrement en mode entrée. Defaults to True.
         """
-        self.p = pyaudio.PyAudio()
+        with ignore_stderr():
+            self.p = pyaudio.PyAudio()
+			
+        # we will use both of light alert and sound alert (with beep function and
+        # electronic buzzer
+        self.led_alert("on")
+        
+        if print_beep: print('\a')
+        else: beep(sound = "coin")
+		
         print("Début enregistrement ...")
         stream =  self.p.open(
             format=self.sample_format,
@@ -46,11 +97,15 @@ class VoiceRecord(object):
         for i in range(0, int(self.frequency / self.n_chunks * self.seconds)):
             data = stream.read(self.n_chunks)
             self.frames.append(data)
+        self.led_alert("off")
         stream.stop_stream()
         stream.close()
         
         print("... Fin enregistrement")
         self.p.terminate()
+        
+        
+        
         
     def save_last_record(self, path: str, filename: str = "output.wav"):
         """Sauvegardons le dernier enregistrement
@@ -69,7 +124,7 @@ class VoiceRecord(object):
                     wf.setframerate(self.frequency)
                     wf.writeframes(b''.join(self.frames))
             else:
-                raise Exception(f"The specified {ext} can not be used !")
+                raise Exception(f"L'extension {ext} ne peut-être utilisée pour la sauvegarde !")
         else:
-            raise Exception("The specified path does not exist !")
+            raise Exception("Le chemin spécifié est introuvable !")
             

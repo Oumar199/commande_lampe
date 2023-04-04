@@ -8,6 +8,7 @@ from speech_google.modelization.training.run_training import SpecRunner1
 from torchvision.transforms import ToTensor, Normalize, Resize, Compose
 from typing import Union, List
 import PIL.Image as pi
+import numpy as np
 import torch
 import os
 
@@ -30,10 +31,11 @@ def predict_record(
     if os.path.exists(path):
         # Récupérons l'image
         image = pi.open(path).convert("RGB") # type: ignore
-
+        #print(np.array(image).shape)
+        
         # Initialisation du transformateur
-        compose = Compose([ ToTensor(), Resize((220, 338)), Normalize(runner.means, runner.stds)])
-        # compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
+        #compose = Compose([ ToTensor(), Resize((369, 496)), Normalize(runner.means, runner.stds)])
+        compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
 
         # Effectuons de la transformation sur l'image
         image: torch.Tensor = compose(image)
@@ -66,9 +68,10 @@ def predict_record(
 
             # Retournons le nom de la classe prédite ainsi que sa probabilité
             return class_name, prob
-
+            #return "noth", 0.5
         except Exception as e:
             raise Exception("Une erreur s'est produite !")
+            print(e)
 
     else:
         raise ValueError("L'enregistrement vocal est indisponible")

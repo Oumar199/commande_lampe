@@ -17,10 +17,10 @@ class SpecModel2(nn.Module):
             output_size (int, optional): Nombre de classes. Defaults to 2.
         """
         super(SpecModel2, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 6)
+        self.conv1 = nn.Conv2d(3, 16, 6)
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 32, 6)
-        self.fc1 = nn.Linear(32 * 51 * 80, num_units)
+        self.conv2 = nn.Conv2d(16, 32, 6)
+        self.fc1 = nn.Linear(32 * 88 * 120, num_units)
         self.drop = nn.Dropout(drop_out_rate)
         self.fc2 = nn.Linear(num_units, output_size)
 
@@ -30,10 +30,12 @@ class SpecModel2(nn.Module):
         Args:
             input (torch.Tensor): Les données d'entrée
         """
-        input = input.unsqueeze(0)
+        input = input.unsqueeze(0) # note: unlike the new version of pytorch we have to 
+        # unsqeeze before sending the input 
+        
         out = self.pool(F.relu(self.conv1(input)))
         out = self.pool(F.relu(self.conv2(out)))
-        out = out.view(-1, 32 * 51 * 80)
+        out = out.view(-1, 32 * 88 * 120)
         out = F.relu(self.fc1(out))
         out = self.drop(out)
         return self.fc2(out)

@@ -3,9 +3,11 @@ Fonction lampe-chatbot
 -----------------
 Ce module doit nous permettre de faire parler un bot en réponse à la commande vocale donnée pour le modèle
 de commande vocale de lampe. 
+
+Copyright © 2022 OkEngineering 
 """
 from speech_google.tests.utils.models.add_spectrogram import auto_create_spec
-from speech_google.tests.lampe_predict1 import predict
+from speech_google.tests.lampe_predict1 import predict, predict2
 from gtts import gTTS
 import random
 import pyglet
@@ -46,38 +48,53 @@ def vocal_print(text: str):
         pass
 
 
-def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.8):
+def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.7):
     """Effectuer une échange avec le bot.
 
     Args:
         exit_ (bool, optional): Indiquer si l'utilisateur souhaite quitter. Defaults to False.
         bot_name (str, optional): Le nom du bot. Defaults to "Elisa".
-        thres (float, optional): Le seuil de probabilité minimale de la classe. Defaults to 0.8.
+        thres (float, optional): Le seuil de probabilité minimale de la classe. Defaults to 0.7.
 
     Returns:
         str: La réponse fournie par le bot
     """
     if exit_ == False:
         # Enregistrement d'une commande
-        key = auto_create_spec()
-
+        key = auto_create_spec(dpi = 100)
+        time.sleep(5)
         # Récupération de la prédiction et de sa probabilité
+        # class_name, prob = predict(key) # we will use the second function
         class_name, prob = predict(key)
-        prob = prob.item()  # On récupère la probabilité en nombre et non en tensor
         
+        #prob = prob.item()  # On récupère la probabilité en nombre et non en tensor
+        
+        #---------------------
+        #prob = 0.5
+        #class_name == "noth"
+        #---------------------
+        
+        print(class_name, prob)
         # Initialisation de la réponse à ""
         response = ""
         # Le bot ne donne une réponse que si la probabilité de la classe prédite dépasse un seuil fourni
-        if prob > thres:
-            if class_name == "noth":
+        if class_name == "noth":
                 pass
-            else:
+        else:
+            if prob > thres:
+                if class_name == "on":
+                    option = "101"
+                elif class_name == "off":
+                    option = "102"
+
+                with open('speech_google/data/node_interactions/led_control.txt', 'w') as f:
+                    f.write(option)
                 # On récupère aléatoirement une réponse et on remplace 'bot_name', s'il y figure, par le nom du bot
                 for intent in lampe_json["lampe_test1"]:
                     if class_name == intent["tag"]:
                         response = f"{random.choice(intent['responses']).replace('bot_name', bot_name)}"
-        else:
-            response = "Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
-        return class_name, response
+            else:
+                response = "Je n'ai pas compris ce que vous aviez dit ! Veuillez répéter s'il vous plaît"
+        return response
     else:
         return "Au revoir. J'espère qu'on se reverra bientôt"
