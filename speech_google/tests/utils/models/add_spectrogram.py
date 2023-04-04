@@ -43,9 +43,13 @@ def auto_create_spec(
     Y_spec = librosa.power_to_db(result)
     
     # Définition d'un figsize pour fixer la taille des spectrogrammes
+<<<<<<< HEAD
     #plt.figure(figsize = (6*308, 4*496/465))
     plt.figure(figsize = (6*(496/465), 4*(369/308)))
     #plt.figure(figsize = (6, 4))
+=======
+    plt.figure(figsize = (6*308/306, 4*469/465))
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
     
     # Tracons le spectrogramme
     librosa.display.specshow(

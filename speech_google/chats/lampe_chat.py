@@ -61,12 +61,17 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.7
     """
     if exit_ == False:
         # Enregistrement d'une commande
+<<<<<<< HEAD
         key = auto_create_spec(dpi = 100)
+=======
+        key = auto_create_spec()
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
         time.sleep(5)
         # Récupération de la prédiction et de sa probabilité
         # class_name, prob = predict(key) # we will use the second function
         class_name, prob = predict(key)
         
+<<<<<<< HEAD
         #prob = prob.item()  # On récupère la probabilité en nombre et non en tensor
         
         #---------------------
@@ -74,6 +79,8 @@ def lampe_chat1(exit_: bool = False, bot_name: str = "Elisa", thres: float = 0.7
         #class_name == "noth"
         #---------------------
         
+=======
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
         print(class_name, prob)
         # Initialisation de la réponse à ""
         response = ""

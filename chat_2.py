@@ -27,7 +27,11 @@ def multi_processes(process):
                     with open('speech_google/data/node_interactions/led2_control.txt', 'w') as f:
                         f.write(j)
 				
+<<<<<<< HEAD
                 with open("speech_google/data/node_interactions/chat_dis.txt", "r") as f:
+=======
+                with open("/home/pi/Projects/commande_lampe/speech_google/data/node_interactions/chat_dis.txt", "r") as f:
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
                     c = f.readlines()[0].strip()
                     with open('speech_google/data/node_interactions/chat_en_control.txt', 'w') as f:
                         f.write(c)

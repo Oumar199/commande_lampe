@@ -23,14 +23,24 @@ def predict(key: str):
     # Initialisation la classe d'entraînement
     lampe_model = SpecRunner3(
         None, # type: ignore
+<<<<<<< HEAD
         version=12,
         means=[0.34141504764556885, 0.11615464836359024, 0.32915809750556946],
         stds=[0.306147038936615, 0.13027192652225494, 0.19265204668045044]
+=======
+        version=7,
+        means=[0.421038955450058, 0.16910940408706665, 0.3270846903324127],
+        stds=[0.3631325662136078, 0.1968977302312851, 0.20224598050117493]
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
     )
 
     # Effectuons la compilation du modèle
     lampe_model.compile(
+<<<<<<< HEAD
         output_size=3, num_units=128, drop_out_rate=0.2, learning_rate=0.0001
+=======
+        output_size=3, num_units=128, drop_out_rate=0.3, learning_rate=0.001
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
     )
 
     return predict_record(

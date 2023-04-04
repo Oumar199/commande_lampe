@@ -34,8 +34,13 @@ def predict_record(
         #print(np.array(image).shape)
         
         # Initialisation du transformateur
+<<<<<<< HEAD
         #compose = Compose([ ToTensor(), Resize((369, 496)), Normalize(runner.means, runner.stds)])
         compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
+=======
+        compose = Compose([ ToTensor(), Resize((369, 496)), Normalize(runner.means, runner.stds)])
+        # compose = Compose([ToTensor(), Normalize(runner.means, runner.stds)])
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
 
         # Effectuons de la transformation sur l'image
         image: torch.Tensor = compose(image)

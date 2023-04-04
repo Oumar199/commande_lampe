@@ -74,6 +74,7 @@ class VoiceRecord(object):
         Args:
             input (bool, optional): Mets l'enregistrement en mode entrée. Defaults to True.
         """
+<<<<<<< HEAD
         with ignore_stderr():
             self.p = pyaudio.PyAudio()
 			
@@ -84,6 +85,11 @@ class VoiceRecord(object):
         if print_beep: print('\a')
         else: beep(sound = "coin")
 		
+=======
+        self.p = pyaudio.PyAudio()
+        
+        self.led_alert("on")
+>>>>>>> 6da7ce28ee5ee7a91878cb6c1a0429d5b95622c0
         print("Début enregistrement ...")
         stream =  self.p.open(
             format=self.sample_format,
@@ -100,8 +106,10 @@ class VoiceRecord(object):
         self.led_alert("off")
         stream.stop_stream()
         stream.close()
-        
+    
         print("... Fin enregistrement")
+        
+        
         self.p.terminate()
         
         
